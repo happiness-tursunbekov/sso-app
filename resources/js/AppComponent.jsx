@@ -1,4 +1,4 @@
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, useNavigate} from 'react-router-dom'
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
@@ -13,7 +13,6 @@ const router = createBrowserRouter(
         </>
     )
 )
-
 
 const AppComponent = () => {
     return (

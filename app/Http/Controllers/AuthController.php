@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\AuthUserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -23,15 +23,15 @@ class AuthController extends Controller
             'rememberMe' => 'nullable|boolean'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
-                'phoneNumber' => ['The provided credentials are incorrect.'],
+                'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        return $user->createToken($request->deviceName)->plainTextToken;
+        return Auth::user()->createToken($request->deviceName)->accessToken;
     }
 
     public function signUp(Request $request)

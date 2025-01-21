@@ -1,10 +1,15 @@
 import {useState} from "react";
+import {fetchUser} from "../store/reducers/authReducer";
+import {store} from "../store";
+import {useNavigate} from "react-router-dom";
 
 const Auth = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
+
+    const navigate = useNavigate()
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -15,7 +20,10 @@ const Auth = () => {
             rememberMe,
             deviceName: navigator.userAgent
         }).then(res => {
-            console.log(res)
+            const token = `Bearer ${res.data}`
+            localStorage.setItem('token', token)
+            store.dispatch(fetchUser(token))
+            navigate('/')
         })
     }
 
@@ -26,11 +34,11 @@ const Auth = () => {
                     <h1 className="h3 mb-3 fw-normal"><i className="bi-person-lock"></i> Please sign in</h1>
 
                     <div className="form-floating">
-                        <input value={email} onChange={e => setEmail(e.target.value)} type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+                        <input required value={email} onChange={e => setEmail(e.target.value)} type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
                         <label htmlFor="floatingInput">Email address</label>
                     </div>
                     <div className="form-floating">
-                        <input value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
+                        <input required value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
                         <label htmlFor="floatingPassword">Password</label>
                     </div>
 

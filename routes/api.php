@@ -19,4 +19,5 @@ Route::post('auth/sign-in', [AuthController::class, 'signIn']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('auth/user', [AuthController::class, 'user']);
+    Route::post('auth/sign-out', [AuthController::class, 'signOut']);
 });
